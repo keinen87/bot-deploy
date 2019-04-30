@@ -10,10 +10,10 @@ if __name__ == '__main__':
     dvmn_url = "https://dvmn.org"
     url = dvmn_url + "/api/long_polling/"
     headers = {
-      "Authorization": os.getenv("dvmn_token")
+      "Authorization": os.environ["dvmn_token"]
     }
     timestamp_parameter = ""
-    telegram_token = os.getenv("telegram_token")
+    telegram_token = os.environ["telegram_token"]
     chat_id = "335075762"
     bot = telegram.Bot(token=telegram_token)
     while True:
