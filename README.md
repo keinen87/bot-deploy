@@ -11,7 +11,7 @@ There are environment variables.
 
 1. *dvmn-token* get from [Devman API](https://dvmn.org/api/docs/)
 
-2. Then send `/start` and `/newbot` commands to [Telegram\'s BotFather](https://telegram.me/BotFather). Take *telegram-token* look like `95132391:wP3db3301vnrob33BZdb33KwP3db3F1I`
+2. Then send `/start` and `/newbot` commands to [Telegram\'s BotFather](https://telegram.me/BotFather). Take *telegram-token* look like `95132391:wP3db3301vnrob33BZdb33KwP3db3F1I`. Send `/start` to bot for activate it.
 
 3. To take *chat_id* send `/start` to telegram bot `@userinfobot`
 
