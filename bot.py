@@ -64,3 +64,4 @@ if __name__ == '__main__':
                 time.sleep(30)  
     except Exception:
         logging.error('Бот не запущен!')
+        logger.error(traceback.format_exc())
