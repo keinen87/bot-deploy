@@ -32,7 +32,11 @@ if __name__ == '__main__':
         exit()
     while True:
         try:
-            response = requests.get(longpolling_url, headers=headers, timeout=long_polling_timeout, params=timestamp_parameter)
+            response = requests.get(
+                longpolling_url,
+                headers=headers,
+                timeout=long_polling_timeout,
+                params=timestamp_parameter)
             if not response.ok:
                 logger.error(f'Ответ от сайта: {response.text}')
                 time.sleep(30)
