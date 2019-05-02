@@ -24,11 +24,11 @@ if __name__ == '__main__':
     timestamp_parameter = ""
     telegram_token = os.environ["telegram_token"]
     chat_id = os.environ["chat_id"]
-    logger = logging.getLogger("Logger")
-    logger.setLevel(logging.INFO)
-    logger.addHandler(MyLogsHandler())
     try:
         bot = telegram.Bot(token=telegram_token)
+        logger = logging.getLogger("Logger")
+        logger.setLevel(logging.INFO)
+        logger.addHandler(MyLogsHandler(bot, chat_id))
         logger.info('Бот запущен!')
         while True:
             try:
