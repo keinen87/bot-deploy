@@ -34,7 +34,8 @@ if __name__ == '__main__':
                     time.sleep(30)
                     continue
                 else:
-                    response = response.json
+                    print(response.text)
+                    response = response.json()
                     first_attempt = response["new_attempts"][0]
                     lesson_title = first_attempt["lesson_title"]
                     lesson_url = dvmn_url + first_attempt["lesson_url"]
