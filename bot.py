@@ -25,7 +25,7 @@ if __name__ == "__main__":
         logger = logging.getLogger("Logger")
         logger.setLevel(logging.INFO)
         logger.addHandler(MyLogsHandler())
-        logger.info("Бот запущен!'")
+        logger.info("Бот запущен!")
     except Exception:
         logging.error("Бот не запущен!")
         logger.error(traceback.format_exc())
