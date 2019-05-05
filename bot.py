@@ -10,7 +10,7 @@ class MyLogsHandler(logging.Handler):
         log_entry = self.format(record)  
         bot.send_message(chat_id=chat_id, text=log_entry)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dvmn_url = "https://dvmn.org"
     longpolling_url = dvmn_url + "/api/long_polling/"
     headers = {
@@ -25,9 +25,9 @@ if __name__ == '__main__':
         logger = logging.getLogger("Logger")
         logger.setLevel(logging.INFO)
         logger.addHandler(MyLogsHandler())
-        logger.info('Бот запущен!')
+        logger.info("Бот запущен!'")
     except Exception:
-        logging.error('Бот не запущен!')
+        logging.error("Бот не запущен!")
         logger.error(traceback.format_exc())
         exit()
     while True:
@@ -38,7 +38,7 @@ if __name__ == '__main__':
                 timeout=long_polling_timeout,
                 params=timestamp_parameter)
             if not response.ok:
-                logger.error(f'Ответ от сайта: {response.text}')
+                logger.error(f"Ответ от сайта: {response.text}")
                 time.sleep(30)
                 continue
             response = response.json()
@@ -46,9 +46,9 @@ if __name__ == '__main__':
             lesson_title = last_attempt["lesson_title"]
             lesson_url = dvmn_url + last_attempt["lesson_url"]
             if last_attempt["is_negative"]:
-                lesson_pass = 'К сожалению, в работе нашлись ошибки.'
+                lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
             else:
-                lesson_pass = 'Преподавателю все понравилось, можно приступать к следующему уроку!'
+                lesson_pass = "К сожалению, в работе нашлись ошибки"
             message = "Преподаватель проверил работу: "
             text = "{message} \"{lesson_title}\" {lesson_url} {lesson_pass}".format(
                     message=message,
@@ -64,6 +64,6 @@ if __name__ == '__main__':
         except requests.ConnectionError:
             pass
         except Exception:
-            logger.error('Бот упал с ошибкой:')   
+            logger.error("Бот упал с ошибкой:")   
             logger.error(traceback.format_exc())
             time.sleep(30)
