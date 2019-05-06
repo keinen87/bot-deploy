@@ -16,7 +16,7 @@ if __name__ == "__main__":
     headers = {
       "Authorization": os.environ["dvmn_token"]
     }
-    long_polling_timeout = 90
+    long_polling_timeout = 300
     timestamp_parameter = ""
     telegram_token = os.environ["telegram_token"]
     chat_id = os.environ["chat_id"]
