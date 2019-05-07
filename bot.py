@@ -66,7 +66,7 @@ if __name__ == "__main__":
             text = get_lesson_result(response.json())     
             logger.info(text)
             timestamp_parameter = str(response["last_attempt_timestamp"])
-        except KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError:
+        except (KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError):
             pass
         except Exception:
             logger.error("Бот упал с ошибкой:")   
