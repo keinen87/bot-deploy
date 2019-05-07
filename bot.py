@@ -5,12 +5,35 @@ import telegram
 import time
 import traceback
 
-class MyLogsHandler(logging.Handler):
-    def emit(self, record):
-        log_entry = self.format(record)  
-        bot.send_message(chat_id=chat_id, text=log_entry)
+def init_logger():
+    logger = logging.getLogger("Logger")
+    logger.setLevel(logging.INFO)
+    logger.addHandler(MyLogsHandler())  
+    return logger
+
+def get_lesson_result(response):
+    last_attempt = response["new_attempts"][0]
+    lesson_title = last_attempt["lesson_title"]
+    lesson_url = dvmn_url + last_attempt["lesson_url"]
+    if last_attempt["is_negative"]:
+        lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
+    else:
+    lesson_pass = "К сожалению, в работе нашлись ошибки"
+    message = "Преподаватель проверил работу: "
+    text = "{message} \"{lesson_title}\" {lesson_url} {lesson_pass}".format(
+             message=message,
+             lesson_title=lesson_title,
+             lesson_url=lesson_url,
+             lesson_pass=lesson_pass)     
+    return text
 
 if __name__ == "__main__":
+    
+    class MyLogsHandler(logging.Handler):
+        def emit(self, record):
+            log_entry = self.format(record)  
+            bot.send_message(chat_id=chat_id, text=log_entry)   
+            
     dvmn_url = "https://dvmn.org"
     longpolling_url = dvmn_url + "/api/long_polling/"
     headers = {
@@ -22,9 +45,7 @@ if __name__ == "__main__":
     chat_id = os.environ["chat_id"]
     try:
         bot = telegram.Bot(token=telegram_token)
-        logger = logging.getLogger("Logger")
-        logger.setLevel(logging.INFO)
-        logger.addHandler(MyLogsHandler())
+        logger = init_logger()
         logger.info("Бот запущен!")
     except Exception:
         logging.error("Бот не запущен!")
@@ -38,30 +59,14 @@ if __name__ == "__main__":
                 timeout=long_polling_timeout,
                 params=timestamp_parameter)
             if not response.ok:
+                logging.error(response.text)
                 logger.error(f"Ответ от сайта: {response.text}")
                 time.sleep(30)
                 continue
-            response = response.json()
-            last_attempt = response["new_attempts"][0]
-            lesson_title = last_attempt["lesson_title"]
-            lesson_url = dvmn_url + last_attempt["lesson_url"]
-            if last_attempt["is_negative"]:
-                lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
-            else:
-                lesson_pass = "К сожалению, в работе нашлись ошибки"
-            message = "Преподаватель проверил работу: "
-            text = "{message} \"{lesson_title}\" {lesson_url} {lesson_pass}".format(
-                    message=message,
-                    lesson_title=lesson_title,
-                    lesson_url=lesson_url,
-                    lesson_pass=lesson_pass)      
+            text = get_lesson_result(response.json())     
             logger.info(text)
             timestamp_parameter = str(response["last_attempt_timestamp"])
-        except KeyError:
-            pass
-        except requests.exceptions.ReadTimeout:   
-            pass
-        except requests.ConnectionError:
+        except KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError:
             pass
         except Exception:
             logger.error("Бот упал с ошибкой:")   
