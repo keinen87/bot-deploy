@@ -63,7 +63,8 @@ if __name__ == "__main__":
                 logger.error(f"Ответ от сайта: {response.text}")
                 time.sleep(30)
                 continue
-            text = get_lesson_result(response.json())     
+            response = response.json()    
+            text = get_lesson_result(response)     
             logger.info(text)
             timestamp_parameter = str(response["last_attempt_timestamp"])
         except (KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError):
