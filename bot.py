@@ -39,7 +39,7 @@ if __name__ == "__main__":
     headers = {
       "Authorization": os.environ["dvmn_token"]
     }
-    long_polling_timeout = 300
+    long_polling_timeout = 90
     timestamp_parameter = ""
     telegram_token = os.environ["telegram_token"]
     chat_id = os.environ["chat_id"]
@@ -64,7 +64,8 @@ if __name__ == "__main__":
                 time.sleep(30)
                 continue
             response = response.json()
-            logging.info(response)
+            if response["status"] == "timeout":
+                logging.info("Информации по проверке уроков пока нет")
             text = get_lesson_result(response)     
             logger.info(text)
             timestamp_parameter = str(response["last_attempt_timestamp"])
