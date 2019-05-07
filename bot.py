@@ -18,7 +18,7 @@ def get_lesson_result(response):
     if last_attempt["is_negative"]:
         lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
     else:
-    lesson_pass = "К сожалению, в работе нашлись ошибки"
+        lesson_pass = "К сожалению, в работе нашлись ошибки"
     message = "Преподаватель проверил работу: "
     text = "{message} \"{lesson_title}\" {lesson_url} {lesson_pass}".format(
              message=message,
