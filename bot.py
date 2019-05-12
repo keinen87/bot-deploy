@@ -5,10 +5,10 @@ import telegram
 import time
 import traceback
 
-def init_logger():
+def init_logger(handler):
     logger = logging.getLogger("Logger")
     logger.setLevel(logging.INFO)
-    logger.addHandler(MyLogsHandler())  
+    logger.addHandler(handler)  
     return logger
 
 def get_lesson_result(response):
@@ -16,9 +16,9 @@ def get_lesson_result(response):
     lesson_title = last_attempt["lesson_title"]
     lesson_url = dvmn_url + last_attempt["lesson_url"]
     if last_attempt["is_negative"]:
-        lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
-    else:
         lesson_pass = "К сожалению, в работе нашлись ошибки"
+    else:
+        lesson_pass = "Преподавателю все понравилось, можно приступать к следующему уроку!"
     message = "Преподаватель проверил работу: "
     text = "{message} \"{lesson_title}\" {lesson_url} {lesson_pass}".format(
              message=message,
@@ -45,11 +45,10 @@ if __name__ == "__main__":
     chat_id = os.environ["chat_id"]
     try:
         bot = telegram.Bot(token=telegram_token)
-        logger = init_logger()
+        logger = init_logger(MyLogsHandler())
         logger.info("Бот запущен!")
     except Exception:
-        logging.error("Бот не запущен!")
-        logger.error(traceback.format_exc())
+        logging.exception("Бот не запущен!")
         exit()
     while True:
         try:
@@ -65,13 +64,14 @@ if __name__ == "__main__":
                 continue
             response = response.json()
             if response["status"] == "timeout":
+                timestamp_parameter["timestamp"] = response['timestamp_to_request']
                 logging.info("Информации по проверке уроков пока нет")
-            text = get_lesson_result(response)     
-            logger.info(text)
-            timestamp_parameter = str(response["last_attempt_timestamp"])
+            elif response["status"] == "found":
+                text = get_lesson_result(response)     
+                logger.info(text)
+                timestamp_parameter = response["last_attempt_timestamp"]
         except (KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError):
             pass
         except Exception:
-            logger.error("Бот упал с ошибкой:")   
-            logger.error(traceback.format_exc())
+            logger.exception("Бот упал с ошибкой:")   
             time.sleep(30)
