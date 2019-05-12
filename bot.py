@@ -40,7 +40,7 @@ if __name__ == "__main__":
       "Authorization": f'Token {os.environ["dvmn_token"]}'
     }
     long_polling_timeout = 90
-    timestamp_parameter = ""
+    timestamp_parameter = {"timestamp": ""}
     telegram_token = os.environ["telegram_token"]
     chat_id = os.environ["chat_id"]
     try:
