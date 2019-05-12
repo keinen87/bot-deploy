@@ -37,7 +37,7 @@ if __name__ == "__main__":
     dvmn_url = "https://dvmn.org"
     longpolling_url = dvmn_url + "/api/long_polling/"
     headers = {
-      "Authorization": f.'Token {os.environ["dvmn_token"]}'
+      "Authorization": f'Token {os.environ["dvmn_token"]}'
     }
     long_polling_timeout = 90
     timestamp_parameter = ""
