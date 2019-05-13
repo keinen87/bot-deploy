@@ -69,7 +69,7 @@ if __name__ == "__main__":
             elif response["status"] == "found":
                 text = get_lesson_result(response)     
                 logger.info(text)
-                timestamp_parameter = str(response["last_attempt_timestamp"])
+                timestamp_parameter["timestamp"] = str(response["last_attempt_timestamp"])
         except (KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError):
             pass
         except Exception:
