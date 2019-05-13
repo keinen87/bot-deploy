@@ -64,12 +64,12 @@ if __name__ == "__main__":
                 continue
             response = response.json()
             if response["status"] == "timeout":
-                timestamp_parameter["timestamp"] = response['timestamp_to_request']
+                timestamp_parameter["timestamp"] = str(response['timestamp_to_request'])
                 logging.info("Информации по проверке уроков пока нет")
             elif response["status"] == "found":
                 text = get_lesson_result(response)     
                 logger.info(text)
-                timestamp_parameter = response["last_attempt_timestamp"]
+                timestamp_parameter = str(response["last_attempt_timestamp"])
         except (KeyError, requests.exceptions.ReadTimeout, requests.ConnectionError):
             pass
         except Exception:
